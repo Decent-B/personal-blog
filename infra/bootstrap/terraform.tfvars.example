@@ -1,0 +1,12 @@
+project_id        = "project_id"
+region            = "region"
+state_bucket_name = "project-tf-state"
+
+# Required: GitHub org/user and repo (name only, no owner prefix)
+# Example: github_owner = "my-org"; github_repo = "my-repo"
+github_owner = "REPLACE_ME"
+github_repo  = "REPLACE_ME"
+
+# Strongly recommended: numeric IDs for tighter security
+# github_owner_id = "12345678"
+# github_repo_id  = "987654321"
