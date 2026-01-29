@@ -1,0 +1,7 @@
+[project]
+name = "personal-blog"
+version = "0.1.0"
+description = "Personal blog on GCP with Terraform, Cloud CDN, serverless analytics, and keyless CI/CD via GitHub Actions."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
