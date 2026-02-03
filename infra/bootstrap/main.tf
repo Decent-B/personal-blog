@@ -1,3 +1,4 @@
+# Using Google Cloud Platform as the Provider
 provider "google" {
   project = var.project_id
   region  = var.region
