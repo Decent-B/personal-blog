@@ -4,3 +4,4 @@ system_docs
 crash.log
 infra/bootstrap/terraform.tfvars
 gha-creds-*.json
+**/*.tfbackend
