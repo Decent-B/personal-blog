@@ -33,6 +33,12 @@ jobs:
         module:
           - name: bootstrap
             path: infra/bootstrap
+            backend: local
+            allow_apply: "false"
+          - name: frontend
+            path: infra/frontend
+            backend: gcs
+            backend_prefix: infra/frontend
             allow_apply: "false"
     defaults:
       run:
@@ -47,8 +53,14 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
       - name: terraform fmt
         run: terraform fmt -check -recursive
-      - name: terraform init
+      - name: terraform init (local backend)
+        if: matrix.module.backend == 'local'
         run: terraform init -input=false
+      - name: terraform init (gcs backend)
+        if: matrix.module.backend == 'gcs'
+        run: terraform init -input=false \
+          -backend-config="bucket=${{ vars.TF_VAR_state_bucket_name }}" \
+          -backend-config="prefix=${{ matrix.module.backend_prefix }}"
       - name: terraform validate
         run: terraform validate -no-color
       - name: terraform plan
@@ -62,6 +74,12 @@ jobs:
         module:
           - name: bootstrap
             path: infra/bootstrap
+            backend: local
+            allow_apply: "false"
+          - name: frontend
+            path: infra/frontend
+            backend: gcs
+            backend_prefix: infra/frontend
             allow_apply: "false"
     defaults:
       run:
@@ -74,8 +92,14 @@ jobs:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: ${{ vars.GCP_TERRAFORM_SA }}
       - uses: hashicorp/setup-terraform@v3
-      - name: terraform init
+      - name: terraform init (local backend)
+        if: matrix.module.backend == 'local'
         run: terraform init -input=false
+      - name: terraform init (gcs backend)
+        if: matrix.module.backend == 'gcs'
+        run: terraform init -input=false \
+          -backend-config="bucket=${{ vars.TF_VAR_state_bucket_name }}" \
+          -backend-config="prefix=${{ matrix.module.backend_prefix }}"
       - name: terraform apply
         if: matrix.module.allow_apply == 'true'
         run: terraform apply -auto-approve -input=false
