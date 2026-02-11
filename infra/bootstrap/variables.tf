@@ -56,5 +56,6 @@ variable "terraform_sa_roles" {
     "roles/iam.workloadIdentityPoolAdmin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/serviceusage.serviceUsageAdmin",
+    "roles/compute.viewer"
   ]
 }
