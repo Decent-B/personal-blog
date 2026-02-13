@@ -40,9 +40,18 @@ resource "google_compute_url_map" "site" {
   default_service = google_compute_backend_bucket.site.id
 }
 
+resource "google_compute_url_map" "site_redirect" {
+  name = "${var.project_id}-site-redirect"
+
+  default_url_redirect {
+    https_redirect = true
+    strip_query    = false
+  }
+}
+
 resource "google_compute_target_http_proxy" "site" {
   name    = "${var.project_id}-site-http-proxy"
-  url_map = google_compute_url_map.site.id
+  url_map = google_compute_url_map.site_redirect.id
 }
 
 resource "google_compute_global_address" "site" {
