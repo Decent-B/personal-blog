@@ -55,3 +55,24 @@ resource "google_compute_global_forwarding_rule" "site" {
   port_range = "80"
   target     = google_compute_target_http_proxy.site.id
 }
+
+resource "google_compute_managed_ssl_certificate" "site" {
+  name = "${var.project_id}-site-cert"
+
+  managed {
+    domains = var.site_domains
+  }
+}
+
+resource "google_compute_target_https_proxy" "site" {
+  name             = "${var.project_id}-site-https-proxy"
+  url_map          = google_compute_url_map.site.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.site.id]
+}
+
+resource "google_compute_global_forwarding_rule" "site_https" {
+  name       = "${var.project_id}-site-https"
+  ip_address = google_compute_global_address.site.address
+  port_range = "443"
+  target     = google_compute_target_https_proxy.site.id
+}
